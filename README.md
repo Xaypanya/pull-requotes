@@ -2,6 +2,9 @@
 
 A beautiful, infinite-scrolling wall of developer quotes with GitHub profile integration. Crowdsourced wisdom from the developer community.
 
+**🔗 Live :** https://xaypanya.github.io/pull-requotes/
+**📦 Repository:** https://github.com/Xaypanya/pull-requotes
+
 🎉 **Perfect for Hacktoberfest!** Easy contributions, beginner-friendly, and your quote & profile will be displayed for everyone to see!
 
 ## Features

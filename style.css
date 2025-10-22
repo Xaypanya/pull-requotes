@@ -153,43 +153,35 @@ body {
     font-size: 12px;
 }
 
-#header-badge {
+#contribute-badge {
     position: fixed;
     top: 20px;
     right: 20px;
     z-index: 1000;
     background: rgba(22, 27, 34, 0.95);
-    padding: 15px 20px;
+    padding: 12px 20px;
     border-radius: 8px;
     border: 1px solid rgba(88, 166, 255, 0.3);
     backdrop-filter: blur(10px);
-}
-
-.badge-content {
+    text-decoration: none;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 12px;
-}
-
-.badge-icon {
-    font-size: 24px;
-}
-
-.badge-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.badge-title {
-    font-weight: 700;
+    gap: 8px;
     color: #58a6ff;
-    font-size: 13px;
+    font-weight: 600;
+    font-size: 14px;
 }
 
-.badge-link {
-    color: #8b949e;
-    font-size: 11px;
+#contribute-badge:hover {
+    transform: translateY(-2px);
+    border-color: rgba(88, 166, 255, 0.6);
 }
+
+#contribute-badge svg {
+    fill: #58a6ff;
+}
+
 
 #loading {
     position: fixed;

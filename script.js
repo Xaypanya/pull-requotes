@@ -95,7 +95,7 @@ function createCardElements() {
                 </a>
                 <div class="profile-info">
                     <a href="https://github.com/${card.quote.githubUsername}" target="_blank" class="profile-name-link">
-                        <div class="profile-name"></div>
+                        <div class="profile-name">Loading...</div>
                     </a>
                 </div>
             </div>
@@ -165,13 +165,18 @@ async function fetchProfiles() {
                     stats.push(`⭐ ${profile.totalStars}`);
                     stats.push(`📦 ${profile.publicRepos}`);
                     if (profile.topLanguages.length > 0) {
-                        stats.push(`🔤 ${profile.topLanguages.join(', ')}`);
+                        stats.push(`🗿 ${profile.topLanguages.join(', ')}`);
                     }
-                    profileNameEl.innerHTML = `<div style="font-weight: 700; margin-bottom: 4px;">${profile.name || username}</div><div style="font-size: 10px; color: #8b949e; font-weight: 400;">${stats.join(' • ')}</div>`;
+                    profileNameEl.innerHTML = `<div style="font-weight: 700; margin-bottom: 4px; color: #2d2d2d;">${profile.name || username}</div><div style="font-size: 10px; color: #666; font-weight: 400;">${stats.join(' • ')}</div>`;
                 }
 
             } catch (error) {
                 console.error(`Error fetching profile for ${username}:`, error);
+                // Update with fallback if API fails
+                const profileNameEl = card.element.querySelector('.profile-name');
+                if (profileNameEl) {
+                    profileNameEl.innerHTML = `<div style="font-weight: 700; color: #2d2d2d;">${username}</div>`;
+                }
             }
         }
     }
