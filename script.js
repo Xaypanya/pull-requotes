@@ -152,7 +152,22 @@ function focusRandomCard() {
 async function fetchProfiles() {
     for (const card of cards) {
         const username = card.quote.githubUsername;
-        if (!profileCache[username]) {
+        const profileNameEl = card.element.querySelector('.profile-name');
+
+        // If profile is cached, display it immediately
+        if (profileCache[username]) {
+            const profile = profileCache[username];
+            if (profileNameEl) {
+                const stats = [];
+                stats.push(`⭐ ${profile.totalStars}`);
+                stats.push(`📦 ${profile.publicRepos}`);
+                if (profile.topLanguages.length > 0) {
+                    stats.push(`🗿 ${profile.topLanguages.join(', ')}`);
+                }
+                profileNameEl.innerHTML = `<div class="profile-display-name">${profile.name || username}</div><div class="profile-stats">${stats.join(' • ')}</div>`;
+            }
+        } else {
+            // Only fetch if not cached
             try {
                 // Fetch user profile
                 const userResponse = await fetch(`https://api.github.com/users/${username}`);
@@ -184,7 +199,6 @@ async function fetchProfiles() {
                 profileCache[username] = profile;
 
                 // Update card with profile info
-                const profileNameEl = card.element.querySelector('.profile-name');
                 if (profileNameEl) {
                     const stats = [];
                     stats.push(`⭐ ${profile.totalStars}`);
@@ -198,7 +212,6 @@ async function fetchProfiles() {
             } catch (error) {
                 console.error(`Error fetching profile for ${username}:`, error);
                 // Update with fallback if API fails
-                const profileNameEl = card.element.querySelector('.profile-name');
                 if (profileNameEl) {
                     profileNameEl.innerHTML = `<div class="profile-display-name">${username}</div>`;
                 }
