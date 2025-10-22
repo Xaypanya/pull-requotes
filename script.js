@@ -3,6 +3,7 @@ let allQuotes = [];
 const profileCache = {};
 let cards = [];
 let searchTerm = '';
+let categoryFilter = '';
 
 // Camera/View state
 let offsetX = 0;
@@ -53,15 +54,31 @@ async function loadQuotes() {
     }
 }
 
-// Filter quotes based on search term
+// Auto-categorize quotes
+function categorizeQuote(quote) {
+    const text = quote.toLowerCase();
+    if (text.includes('bug') || text.includes('debug') || text.includes('error')) return 'debugging';
+    if (text.includes('code') || text.includes('program')) return 'wisdom';
+    if (text.includes('learn') || text.includes('understand')) return 'learning';
+    if (text.includes('!') || text.includes('machine') || text.includes('feature')) return 'humor';
+    return 'wisdom';
+}
+
+// Filter quotes based on search term and category
 function getFilteredQuotes() {
-    if (!searchTerm) return allQuotes;
-    const term = searchTerm.toLowerCase();
-    return allQuotes.filter(q => 
-        q.quote.toLowerCase().includes(term) ||
-        q.githubUsername.toLowerCase().includes(term) ||
-        (q.date && q.date.includes(term))
-    );
+    let filtered = allQuotes;
+    if (categoryFilter) {
+        filtered = filtered.filter(q => categorizeQuote(q.quote) === categoryFilter);
+    }
+    if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        filtered = filtered.filter(q => 
+            q.quote.toLowerCase().includes(term) ||
+            q.githubUsername.toLowerCase().includes(term) ||
+            (q.date && q.date.includes(term))
+        );
+    }
+    return filtered;
 }
 
 // Generate card positions in a grid
@@ -110,7 +127,10 @@ function createCardElements() {
         const cardEl = document.createElement('div');
         cardEl.className = 'quote-card';
 
+        const category = categorizeQuote(card.quote.quote);
         cardEl.innerHTML = `
+            <button class="copy-btn" title="Copy quote">📋</button>
+            <span class="category-tag ${category}">${category}</span>
             <div class="quote-text">"${card.quote.quote}"</div>
             <div class="quote-author">— @${card.quote.githubUsername}</div>
             <div class="profile">
@@ -125,6 +145,15 @@ function createCardElements() {
                 <div class="quote-date">${card.quote.date || ''}</div>
             </div>
         `;
+
+        // Copy button functionality
+        const copyBtn = cardEl.querySelector('.copy-btn');
+        copyBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigator.clipboard.writeText(card.quote.quote);
+            copyBtn.textContent = '✓';
+            setTimeout(() => copyBtn.textContent = '📋', 1500);
+        });
 
         card.element = cardEl;
         cardsContainer.appendChild(cardEl);
@@ -337,6 +366,69 @@ themeToggle.addEventListener('click', () => {
     localStorage.setItem('theme', isLight ? 'light' : 'dark');
 });
 
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+    if (e.target === searchInput) return;
+    
+    const step = 100;
+    switch(e.key) {
+        case 'ArrowUp':
+            e.preventDefault();
+            offsetY += step;
+            updateCardPositions();
+            break;
+        case 'ArrowDown':
+            e.preventDefault();
+            offsetY -= step;
+            updateCardPositions();
+            break;
+        case 'ArrowLeft':
+            e.preventDefault();
+            offsetX += step;
+            updateCardPositions();
+            break;
+        case 'ArrowRight':
+            e.preventDefault();
+            offsetX -= step;
+            updateCardPositions();
+            break;
+        case ' ':
+            e.preventDefault();
+            focusRandomCard();
+            updateCardPositions();
+            break;
+        case 'Escape':
+            searchInput.value = '';
+            searchTerm = '';
+            categoryFilter = '';
+            generateCards();
+            break;
+        case '/':
+            e.preventDefault();
+            searchInput.focus();
+            break;
+    }
+});
+
+// Category filter
+function setupCategoryFilters() {
+    const categories = ['wisdom', 'humor', 'debugging', 'learning'];
+    const container = document.getElementById('category-filters');
+    
+    categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'category-filter';
+        btn.textContent = cat;
+        btn.addEventListener('click', () => {
+            categoryFilter = categoryFilter === cat ? '' : cat;
+            document.querySelectorAll('.category-filter').forEach(b => b.classList.remove('active'));
+            if (categoryFilter) btn.classList.add('active');
+            generateCards();
+        });
+        container.appendChild(btn);
+    });
+}
+
 // Search functionality
 searchInput.addEventListener('input', (e) => {
     searchTerm = e.target.value;
@@ -347,3 +439,4 @@ searchInput.addEventListener('input', (e) => {
 initTheme();
 createEmojiPattern();
 loadQuotes();
+setupCategoryFilters();
