@@ -5,9 +5,8 @@
 
   A beautiful, infinite-scrolling wall of developer quotes with GitHub profile integration. Crowdsourced wisdom from the developer community.
 
-  **🔗 Live :** https://xaypanya.github.io/pull-requotes/
-
-  **📦 Repository:** https://github.com/Xaypanya/pull-requotes
+  **🔗 Live :** https://xaypanya.github.io/pull-requotes
+  
 </div>
 
 🎉 **Perfect for Hacktoberfest!** Easy contributions, beginner-friendly, and your quote & profile will be displayed for everyone to see!
@@ -47,7 +46,6 @@ Add your quote entry to the array in `quotes.json`:
   "quote": "Your inspiring developer quote",
   "author": "Quote Author Name",
   "githubUsername": "your-github-username",
-  "category": ["wisdom"],
   "date": "DD-MM-YYYY"
 }
 ```
@@ -58,19 +56,7 @@ Add your quote entry to the array in `quotes.json`:
 - Make sure your JSON is valid (check for proper commas and brackets)
 - Use your actual GitHub username (it will fetch your profile and stats automatically)
 
-### Step 3: Choose a Category
-Pick one or more categories that fit your quote:
-- **wisdom** - Programming wisdom and best practices
-- **humor** - Funny developer quotes
-- **debugging** - About debugging and troubleshooting
-- **career** - Career advice and growth
-- **learning** - Learning tips and resources
-
-Examples:
-- Single category: `"category": ["wisdom"]`
-- Multiple categories: `"category": ["humor", "debugging"]`
-
-### Step 4: Submit a Pull Request
+### Step 3: Submit a Pull Request
 1. Go to your forked repository
 2. Click "Compare & pull request"
 3. Add a title: `Add quote by @your-username`
@@ -87,14 +73,12 @@ Here's a complete example of adding a quote to `quotes.json`:
     "quote": "First, solve the problem. Then, write the code.",
     "author": "John Johnson",
     "githubUsername": "grapongz",
-    "category": ["wisdom", "learning"],
     "date": "22-10-2025"
   },
   {
     "quote": "Code is like humor. When you have to explain it, it's bad.",
     "author": "Cory House",
     "githubUsername": "your-username",
-    "category": ["humor", "wisdom"],
     "date": "23-10-2025"
   }
 ]
