@@ -18,6 +18,15 @@ body {
     color: #c9d1d9;
 }
 
+body.light-mode {
+    background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+    color: #2d3748;
+}
+
+body.light-mode #emoji-pattern {
+    opacity: 0.08;
+}
+
 #board {
     width: 100vw;
     height: 100vh;
@@ -52,6 +61,12 @@ body {
     flex-direction: column;
     justify-content: space-between;
     font-family: 'Fuzzy Bubbles', sans-serif;
+}
+
+body.light-mode .quote-card {
+    background: linear-gradient(135deg, #fff5e1 0%, #fffef7 100%);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 @media (max-width: 768px) {
@@ -121,10 +136,26 @@ body {
         font-size: 8px !important;
     }
 
+    #theme-toggle {
+        top: 10px !important;
+        right: 10px !important;
+        padding: 10px !important;
+    }
+
+    #theme-toggle svg {
+        width: 16px !important;
+        height: 16px !important;
+    }
+
     #contribute-badge {
         padding: 10px 15px !important;
         font-size: 12px !important;
         top: 60px !important;
+        right: 10px !important;
+    }
+
+    #contribute-badge .badge-text {
+        display: none;
     }
 
     #contribute-badge svg {
@@ -153,6 +184,11 @@ body {
     transform: rotate(0deg) translateY(-15px);
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
                 inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+body.light-mode .quote-card:hover {
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .quote-card:nth-child(1) { --rotation: -3deg; }
@@ -268,6 +304,11 @@ body {
     gap: 10px;
 }
 
+body.light-mode #search-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(66, 153, 225, 0.4);
+}
+
 #search-input {
     background: transparent;
     border: none;
@@ -279,13 +320,25 @@ body {
     width: 280px;
 }
 
+body.light-mode #search-input {
+    color: #2d3748;
+}
+
 #search-input::placeholder {
     color: #8b949e;
+}
+
+body.light-mode #search-input::placeholder {
+    color: #718096;
 }
 
 #search-icon {
     fill: #58a6ff;
     flex-shrink: 0;
+}
+
+body.light-mode #search-icon {
+    fill: #4299e1;
 }
 
 @media (max-width: 768px) {
@@ -319,10 +372,59 @@ body {
     }
 }
 
-#contribute-badge {
+#theme-toggle {
     position: fixed;
     top: 20px;
     right: 20px;
+    z-index: 1000;
+    background: rgba(22, 27, 34, 0.95);
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.light-mode #theme-toggle {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(66, 153, 225, 0.4);
+}
+
+#theme-toggle:hover {
+    transform: translateY(-2px);
+    border-color: rgba(88, 166, 255, 0.6);
+}
+
+body.light-mode #theme-toggle:hover {
+    border-color: rgba(66, 153, 225, 0.6);
+}
+
+#theme-toggle .sun-icon {
+    fill: #58a6ff;
+    display: none;
+}
+
+#theme-toggle .moon-icon {
+    fill: #58a6ff;
+    display: block;
+}
+
+body.light-mode #theme-toggle .sun-icon {
+    fill: #f59e0b;
+    display: block;
+}
+
+body.light-mode #theme-toggle .moon-icon {
+    display: none;
+}
+
+#contribute-badge {
+    position: fixed;
+    top: 20px;
+    right: 80px;
     z-index: 1000;
     background: rgba(22, 27, 34, 0.95);
     padding: 12px 20px;
@@ -330,7 +432,6 @@ body {
     border: 1px solid rgba(88, 166, 255, 0.3);
     backdrop-filter: blur(10px);
     text-decoration: none;
-    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -339,13 +440,27 @@ body {
     font-size: 14px;
 }
 
+body.light-mode #contribute-badge {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(66, 153, 225, 0.4);
+    color: #4299e1;
+}
+
 #contribute-badge:hover {
     transform: translateY(-2px);
     border-color: rgba(88, 166, 255, 0.6);
 }
 
+body.light-mode #contribute-badge:hover {
+    border-color: rgba(66, 153, 225, 0.6);
+}
+
 #contribute-badge svg {
     fill: #58a6ff;
+}
+
+body.light-mode #contribute-badge svg {
+    fill: #4299e1;
 }
 
 
@@ -360,6 +475,11 @@ body {
     padding: 20px 40px;
     border-radius: 8px;
     z-index: 100;
+}
+
+body.light-mode #loading {
+    background: rgba(255, 255, 255, 0.95);
+    color: #4a5568;
 }
 
 #loading.hide {
