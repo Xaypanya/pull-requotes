@@ -1,14 +1,12 @@
 [
   {
     "quote": "It works on my machine!",
-    "author": "Ron Jeffries",
     "githubUsername": "Xaypanya",
     "category": ["wisdom"],
     "date": "22-10-2025"
   },
   {
-    "quote": "First, solve the problem. Then, write the code.",
-    "author": "John Johnson",
+    "quote": "until it's done, tell none.",
     "githubUsername": "grapongz",
     "category": ["wisdom", "learning"],
     "date": "22-10-2025"

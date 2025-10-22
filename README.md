@@ -107,13 +107,11 @@ Here's a complete example of adding a quote to `quotes.json`:
 [
   {
     "quote": "First, solve the problem. Then, write the code.",
-    "author": "John Johnson",
     "githubUsername": "grapongz",
     "date": "22-10-2025"
   },
   {
     "quote": "Code is like humor. When you have to explain it, it's bad.",
-    "author": "Cory House",
     "githubUsername": "your-username",
     "date": "23-10-2025"
   }
