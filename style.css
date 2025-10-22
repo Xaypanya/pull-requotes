@@ -359,12 +359,6 @@ body.light-mode #search-icon {
         height: 14px;
     }
 
-    #category-filters {
-        top: 60px;
-        left: 10px;
-        max-width: calc(100% - 20px);
-    }
-
     #keyboard-hint {
         display: none;
     }
@@ -379,15 +373,6 @@ body.light-mode #search-icon {
     #search-input {
         width: 100%;
         font-size: 12px;
-    }
-
-    #category-filters {
-        top: 110px;
-    }
-
-    .category-filter {
-        font-size: 11px;
-        padding: 5px 10px;
     }
 }
 
@@ -525,83 +510,6 @@ body.light-mode #loading {
 
 .copy-btn:hover {
     background: rgba(0, 0, 0, 0.2);
-}
-
-.category-tag {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.category-tag.wisdom {
-    background: #e3f2fd;
-    color: #1976d2;
-}
-
-.category-tag.humor {
-    background: #fff3e0;
-    color: #f57c00;
-}
-
-.category-tag.debugging {
-    background: #fce4ec;
-    color: #c2185b;
-}
-
-.category-tag.learning {
-    background: #e8f5e9;
-    color: #388e3c;
-}
-
-#category-filters {
-    position: fixed;
-    top: 80px;
-    left: 20px;
-    z-index: 1000;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    max-width: 300px;
-}
-
-.category-filter {
-    background: rgba(22, 27, 34, 0.95);
-    border: 1px solid rgba(88, 166, 255, 0.3);
-    border-radius: 6px;
-    padding: 6px 12px;
-    color: #c9d1d9;
-    font-family: 'Fuzzy Bubbles', sans-serif;
-    font-size: 12px;
-    cursor: pointer;
-    backdrop-filter: blur(10px);
-    text-transform: capitalize;
-}
-
-body.light-mode .category-filter {
-    background: rgba(255, 255, 255, 0.95);
-    border-color: rgba(66, 153, 225, 0.4);
-    color: #2d3748;
-}
-
-.category-filter:hover {
-    border-color: rgba(88, 166, 255, 0.6);
-}
-
-.category-filter.active {
-    background: #58a6ff;
-    color: #fff;
-    border-color: #58a6ff;
-}
-
-body.light-mode .category-filter.active {
-    background: #4299e1;
-    border-color: #4299e1;
 }
 
 #keyboard-hint {

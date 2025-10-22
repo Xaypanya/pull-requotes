@@ -3,7 +3,6 @@ let allQuotes = [];
 const profileCache = {};
 let cards = [];
 let searchTerm = '';
-let categoryFilter = '';
 
 // Camera/View state
 let offsetX = 0;
@@ -54,31 +53,15 @@ async function loadQuotes() {
     }
 }
 
-// Auto-categorize quotes
-function categorizeQuote(quote) {
-    const text = quote.toLowerCase();
-    if (text.includes('bug') || text.includes('debug') || text.includes('error')) return 'debugging';
-    if (text.includes('code') || text.includes('program')) return 'wisdom';
-    if (text.includes('learn') || text.includes('understand')) return 'learning';
-    if (text.includes('!') || text.includes('machine') || text.includes('feature')) return 'humor';
-    return 'wisdom';
-}
-
-// Filter quotes based on search term and category
+// Filter quotes based on search term
 function getFilteredQuotes() {
-    let filtered = allQuotes;
-    if (categoryFilter) {
-        filtered = filtered.filter(q => categorizeQuote(q.quote) === categoryFilter);
-    }
-    if (searchTerm) {
-        const term = searchTerm.toLowerCase();
-        filtered = filtered.filter(q => 
-            q.quote.toLowerCase().includes(term) ||
-            q.githubUsername.toLowerCase().includes(term) ||
-            (q.date && q.date.includes(term))
-        );
-    }
-    return filtered;
+    if (!searchTerm) return allQuotes;
+    const term = searchTerm.toLowerCase();
+    return allQuotes.filter(q => 
+        q.quote.toLowerCase().includes(term) ||
+        q.githubUsername.toLowerCase().includes(term) ||
+        (q.date && q.date.includes(term))
+    );
 }
 
 // Generate card positions in a grid
@@ -127,10 +110,8 @@ function createCardElements() {
         const cardEl = document.createElement('div');
         cardEl.className = 'quote-card';
 
-        const category = categorizeQuote(card.quote.quote);
         cardEl.innerHTML = `
             <button class="copy-btn" title="Copy quote">📋</button>
-            <span class="category-tag ${category}">${category}</span>
             <div class="quote-text">"${card.quote.quote}"</div>
             <div class="quote-author">— @${card.quote.githubUsername}</div>
             <div class="profile">
@@ -400,7 +381,6 @@ document.addEventListener('keydown', (e) => {
         case 'Escape':
             searchInput.value = '';
             searchTerm = '';
-            categoryFilter = '';
             generateCards();
             break;
         case '/':
@@ -409,25 +389,6 @@ document.addEventListener('keydown', (e) => {
             break;
     }
 });
-
-// Category filter
-function setupCategoryFilters() {
-    const categories = ['wisdom', 'humor', 'debugging', 'learning'];
-    const container = document.getElementById('category-filters');
-    
-    categories.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.className = 'category-filter';
-        btn.textContent = cat;
-        btn.addEventListener('click', () => {
-            categoryFilter = categoryFilter === cat ? '' : cat;
-            document.querySelectorAll('.category-filter').forEach(b => b.classList.remove('active'));
-            if (categoryFilter) btn.classList.add('active');
-            generateCards();
-        });
-        container.appendChild(btn);
-    });
-}
 
 // Search functionality
 searchInput.addEventListener('input', (e) => {
@@ -439,4 +400,3 @@ searchInput.addEventListener('input', (e) => {
 initTheme();
 createEmojiPattern();
 loadQuotes();
-setupCategoryFilters();
