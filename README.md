@@ -57,7 +57,6 @@ Add your quote entry to the array in `quotes.json`:
 ```json
 {
   "quote": "Your inspiring developer quote",
-  "author": "Quote Author Name",
   "githubUsername": "your-github-username",
   "date": "DD-MM-YYYY"
 }
