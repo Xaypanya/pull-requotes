@@ -111,6 +111,7 @@ function createCardElements() {
         cardEl.className = 'quote-card';
 
         cardEl.innerHTML = `
+            <button class="copy-btn" title="Copy quote">📋</button>
             <div class="quote-text">"${card.quote.quote}"</div>
             <div class="quote-author">— @${card.quote.githubUsername}</div>
             <div class="profile">
@@ -125,6 +126,15 @@ function createCardElements() {
                 <div class="quote-date">${card.quote.date || ''}</div>
             </div>
         `;
+
+        // Copy button functionality
+        const copyBtn = cardEl.querySelector('.copy-btn');
+        copyBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigator.clipboard.writeText(card.quote.quote);
+            copyBtn.textContent = '✓';
+            setTimeout(() => copyBtn.textContent = '📋', 1500);
+        });
 
         card.element = cardEl;
         cardsContainer.appendChild(cardEl);
@@ -348,6 +358,49 @@ themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('light-mode');
     const isLight = document.body.classList.contains('light-mode');
     localStorage.setItem('theme', isLight ? 'light' : 'dark');
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+    if (e.target === searchInput) return;
+    
+    const step = 100;
+    switch(e.key) {
+        case 'ArrowUp':
+            e.preventDefault();
+            offsetY += step;
+            updateCardPositions();
+            break;
+        case 'ArrowDown':
+            e.preventDefault();
+            offsetY -= step;
+            updateCardPositions();
+            break;
+        case 'ArrowLeft':
+            e.preventDefault();
+            offsetX += step;
+            updateCardPositions();
+            break;
+        case 'ArrowRight':
+            e.preventDefault();
+            offsetX -= step;
+            updateCardPositions();
+            break;
+        case ' ':
+            e.preventDefault();
+            focusRandomCard();
+            updateCardPositions();
+            break;
+        case 'Escape':
+            searchInput.value = '';
+            searchTerm = '';
+            generateCards();
+            break;
+        case '/':
+            e.preventDefault();
+            searchInput.focus();
+            break;
+    }
 });
 
 // Search functionality

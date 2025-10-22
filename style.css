@@ -358,6 +358,10 @@ body.light-mode #search-icon {
         width: 14px;
         height: 14px;
     }
+
+    #keyboard-hint {
+        display: none;
+    }
 }
 
 @media (max-width: 480px) {
@@ -484,4 +488,47 @@ body.light-mode #loading {
 
 #loading.hide {
     display: none;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.quote-card:hover .copy-btn {
+    opacity: 1;
+}
+
+.copy-btn:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+#keyboard-hint {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(22, 27, 34, 0.95);
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    border-radius: 6px;
+    padding: 8px 16px;
+    color: #8b949e;
+    font-size: 11px;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+}
+
+body.light-mode #keyboard-hint {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(66, 153, 225, 0.4);
+    color: #718096;
 }
