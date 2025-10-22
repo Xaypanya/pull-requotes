@@ -134,7 +134,7 @@ Want to contribute code? We welcome all improvements!
 
 Thank you to all the amazing contributors who have made this project better! 🌟
 
-<a href="https://contrib.rocks/image?repo=Xaypanya/pull-requotes"><img src="https://contrib.rocks/image?repo=Xaypanya/pull-requotes" /></a>
+<a href="https://github.com/Xaypanya/pull-requotes/graphs/contributors"><img src="https://contrib.rocks/image?repo=Xaypanya/pull-requotes" /></a>
 
 Want to see your avatar here? Check out [How to Contribute](#how-to-contribute) above! 🎉
 
