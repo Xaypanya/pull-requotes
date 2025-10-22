@@ -54,6 +54,84 @@ body {
     font-family: 'Fuzzy Bubbles', sans-serif;
 }
 
+@media (max-width: 768px) {
+    .quote-card {
+        width: 280px;
+        height: 320px;
+        padding: 20px;
+    }
+
+    .quote-text {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+    }
+
+    .quote-author {
+        font-size: 11px !important;
+    }
+
+    .profile-avatar {
+        width: 35px !important;
+        height: 35px !important;
+    }
+
+    .profile-display-name {
+        font-size: 11px !important;
+    }
+
+    .profile-stats {
+        font-size: 9px !important;
+    }
+
+    .quote-date {
+        font-size: 9px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .quote-card {
+        width: 240px;
+        height: 280px;
+        padding: 15px;
+    }
+
+    .quote-text {
+        font-size: 13px !important;
+        line-height: 1.4 !important;
+    }
+
+    .quote-author {
+        font-size: 10px !important;
+    }
+
+    .profile-avatar {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    .profile-display-name {
+        font-size: 10px !important;
+    }
+
+    .profile-stats {
+        font-size: 8px !important;
+    }
+
+    .quote-date {
+        font-size: 8px !important;
+    }
+
+    #contribute-badge {
+        padding: 10px 15px !important;
+        font-size: 12px !important;
+    }
+
+    #contribute-badge svg {
+        height: 16px !important;
+        width: 16px !important;
+    }
+}
+
 .quote-card::before {
     content: '';
     position: absolute;

@@ -7,10 +7,20 @@ let cards = [];
 let offsetX = 0;
 let offsetY = 0;
 
-// Card dimensions
-const CARD_WIDTH = 450;
-const CARD_HEIGHT = 380;
-const GRID_SPACING = 500;
+// Card dimensions (responsive)
+function getCardDimensions() {
+    const width = window.innerWidth;
+    if (width <= 480) {
+        return { width: 240, height: 280, spacing: 280 };
+    } else if (width <= 768) {
+        return { width: 280, height: 320, spacing: 320 };
+    }
+    return { width: 450, height: 380, spacing: 500 };
+}
+
+let CARD_WIDTH = getCardDimensions().width;
+let CARD_HEIGHT = getCardDimensions().height;
+let GRID_SPACING = getCardDimensions().spacing;
 
 // Mouse state
 let isDragging = false;
@@ -225,8 +235,57 @@ document.addEventListener('mouseup', () => {
 
 // Handle window resize
 window.addEventListener('resize', () => {
-    updateCardPositions();
+    const dimensions = getCardDimensions();
+    CARD_WIDTH = dimensions.width;
+    CARD_HEIGHT = dimensions.height;
+    GRID_SPACING = dimensions.spacing;
+
+    // Regenerate cards with new dimensions
+    generateCards();
 });
 
+// Create emoji background pattern
+function createEmojiPattern() {
+    const emojiPattern = document.createElement('div');
+    emojiPattern.id = 'emoji-pattern';
+    emojiPattern.style.cssText = `
+        position: fixed;
+        top: -50%;
+        left: -50%;
+        width: 200vw;
+        height: 200vh;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+        opacity: 0.05;
+        transform: rotate(30deg);
+        transform-origin: center center;
+    `;
+
+    const emojis = ['💻', '⭐', '🚀', '💡', '🎨', '🔧', '⚡', '📦', '🐙', '✨'];
+    const cols = Math.ceil(window.innerWidth * 2 / 80);
+    const rows = Math.ceil(window.innerHeight * 2 / 80);
+
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            const emoji = document.createElement('span');
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            const rotation = (Math.random() - 0.5) * 60; // Random rotation between -30 and 30 degrees
+            emoji.style.cssText = `
+                position: absolute;
+                left: ${j * 80}px;
+                top: ${i * 80}px;
+                font-size: 30px;
+                user-select: none;
+                transform: rotate(${rotation}deg);
+            `;
+            emojiPattern.appendChild(emoji);
+        }
+    }
+
+    document.body.insertBefore(emojiPattern, document.body.firstChild);
+}
+
 // Initialize
+createEmojiPattern();
 loadQuotes();
