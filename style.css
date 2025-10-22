@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #c9d1d9;
+}
+
+#board {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    cursor: grab;
+}
+
+#board:active {
+    cursor: grabbing;
+}
+
+#cards-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.quote-card {
+    position: absolute;
+    width: 450px;
+    height: 380px;
+    background: linear-gradient(135deg, #ffd89b 0%, #fffacd 100%);
+    border-radius: 4px;
+    padding: 25px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transform: rotate(var(--rotation, -2deg));
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: 'Inter', sans-serif;
+}
+
+.quote-card::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    background: radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a);
+    border-radius: 50%;
+    box-shadow: 0 3px 10px rgba(201, 42, 42, 0.5),
+                inset -1px -1px 2px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+
+.quote-card:hover {
+    transform: rotate(0deg) translateY(-15px);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.quote-card:nth-child(1) { --rotation: -3deg; }
+.quote-card:nth-child(2) { --rotation: 2deg; }
+.quote-card:nth-child(3) { --rotation: -1.5deg; }
+.quote-card:nth-child(4) { --rotation: 1.8deg; }
+.quote-card:nth-child(5) { --rotation: -2.5deg; }
+.quote-card:nth-child(6) { --rotation: 0.5deg; }
+.quote-card:nth-child(7) { --rotation: -1.2deg; }
+.quote-card:nth-child(8) { --rotation: 2.3deg; }
+.quote-card:nth-child(9) { --rotation: -0.8deg; }
+.quote-card:nth-child(10) { --rotation: 1.5deg; }
+
+.quote-text {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.7;
+    color: #2d2d2d;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+}
+
+.quote-author {
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.profile {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin-top: auto;
+}
+
+.profile-avatar-link {
+    text-decoration: none;
+    display: flex;
+}
+
+.profile-avatar-link:hover img {
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.profile-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid #e8b74a;
+    object-fit: cover;
+    background: #ddd;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.profile-name-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.profile-name-link:hover .profile-name {
+    color: #58a6ff;
+    transition: color 0.2s;
+}
+
+.profile-name {
+    font-weight: 700;
+    color: #2d2d2d;
+    font-size: 12px;
+}
+
+#header-badge {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(22, 27, 34, 0.95);
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.badge-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.badge-icon {
+    font-size: 24px;
+}
+
+.badge-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.badge-title {
+    font-weight: 700;
+    color: #58a6ff;
+    font-size: 13px;
+}
+
+.badge-link {
+    color: #8b949e;
+    font-size: 11px;
+}
+
+#loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+    color: #8b949e;
+    background: rgba(22, 27, 34, 0.95);
+    padding: 20px 40px;
+    border-radius: 8px;
+    z-index: 100;
+}
+
+#loading.hide {
+    display: none;
+}
