@@ -98,6 +98,7 @@ function createCardElements() {
                         <div class="profile-name">Loading...</div>
                     </a>
                 </div>
+                <div class="quote-date">${card.quote.date || ''}</div>
             </div>
         `;
 
@@ -167,7 +168,7 @@ async function fetchProfiles() {
                     if (profile.topLanguages.length > 0) {
                         stats.push(`🗿 ${profile.topLanguages.join(', ')}`);
                     }
-                    profileNameEl.innerHTML = `<div style="font-weight: 700; margin-bottom: 4px; color: #2d2d2d;">${profile.name || username}</div><div style="font-size: 10px; color: #666; font-weight: 400;">${stats.join(' • ')}</div>`;
+                    profileNameEl.innerHTML = `<div class="profile-display-name">${profile.name || username}</div><div class="profile-stats">${stats.join(' • ')}</div>`;
                 }
 
             } catch (error) {
@@ -175,7 +176,7 @@ async function fetchProfiles() {
                 // Update with fallback if API fails
                 const profileNameEl = card.element.querySelector('.profile-name');
                 if (profileNameEl) {
-                    profileNameEl.innerHTML = `<div style="font-weight: 700; color: #2d2d2d;">${username}</div>`;
+                    profileNameEl.innerHTML = `<div class="profile-display-name">${username}</div>`;
                 }
             }
         }

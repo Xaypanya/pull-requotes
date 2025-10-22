@@ -112,6 +112,15 @@ body {
     margin-top: auto;
 }
 
+.quote-date {
+    color: #999;
+    font-size: 10px;
+    font-weight: 400;
+    font-style: italic;
+    margin-left: auto;
+    align-self: center;
+}
+
 .profile-avatar-link {
     text-decoration: none;
     display: flex;
@@ -142,15 +151,27 @@ body {
     color: inherit;
 }
 
-.profile-name-link:hover .profile-name {
-    color: #58a6ff;
-    transition: color 0.2s;
-}
-
 .profile-name {
     font-weight: 700;
     color: #2d2d2d;
     font-size: 12px;
+}
+
+.profile-display-name {
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #2d2d2d;
+    transition: color 0.2s ease;
+}
+
+.profile-stats {
+    font-size: 10px;
+    color: #666;
+    font-weight: 400;
+}
+
+.profile-name-link:hover .profile-display-name {
+    color: #58a6ff;
 }
 
 #contribute-badge {
