@@ -1,13 +1,11 @@
 [
   {
-    "id": "1",
-    "quote": "Code never lies, comments sometimes do.",
+    "quote": "It works on my machine!",
     "author": "Ron Jeffries",
     "githubUsername": "Xaypanya",
     "category": ["wisdom"]
   },
   {
-    "id": "2",
     "quote": "First, solve the problem. Then, write the code.",
     "author": "John Johnson",
     "githubUsername": "grapongz",

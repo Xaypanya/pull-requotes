@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles:wght@400;700&display=swap');
 
 * {
     margin: 0;
@@ -13,7 +13,7 @@ html, body {
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Fuzzy Bubbles', sans-serif;
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     color: #c9d1d9;
 }
@@ -51,7 +51,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Fuzzy Bubbles', sans-serif;
 }
 
 .quote-card::before {
