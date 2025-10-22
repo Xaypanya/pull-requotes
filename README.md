@@ -98,27 +98,6 @@ Want to contribute code? We welcome all improvements!
 
 💡 **Tip:** Open an issue first to discuss major changes before implementing them!
 
-## Example Quote Contribution
-
-Here's a complete example of adding a quote to `quotes.json`:
-
-```json
-[
-  {
-    "quote": "First, solve the problem. Then, write the code.",
-    "githubUsername": "grapongz",
-    "date": "22-10-2025"
-  },
-  {
-    "quote": "Code is like humor. When you have to explain it, it's bad.",
-    "githubUsername": "your-username",
-    "date": "23-10-2025"
-  }
-]
-```
-
-**Note the comma `,` between entries!**
-
 ## Guidelines
 
 **✅ DO:**
@@ -151,9 +130,13 @@ Here's a complete example of adding a quote to `quotes.json`:
 - 📝 Open an [issue](https://github.com/Xaypanya/pull-requotes/issues) if you have questions
 - 🤝 First-time contributor? We're here to help!
 
-## Author
+## Contributors
 
-Created by [@Xaypanya](https://github.com/Xaypanya)
+Thank you to all the amazing contributors who have made this project better! 🌟
+
+<a href="https://contrib.rocks/image?repo=Xaypanya/pull-requotes"><img src="https://contrib.rocks/image?repo=Xaypanya/pull-requotes" /></a>
+
+Want to see your avatar here? Check out [How to Contribute](#how-to-contribute) above! 🎉
 
 ---
 
