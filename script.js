@@ -23,18 +23,20 @@ let CARD_WIDTH = getCardDimensions().width;
 let CARD_HEIGHT = getCardDimensions().height;
 let GRID_SPACING = getCardDimensions().spacing;
 
-// Mouse state
+// Mouse/Touch state
 let isDragging = false;
 let dragStartX = 0;
 let dragStartY = 0;
 let dragStartOffsetX = 0;
 let dragStartOffsetY = 0;
+let lastTouchDistance = 0;
 
 // DOM elements
 const board = document.getElementById('board');
 const cardsContainer = document.getElementById('cards-container');
 const loading = document.getElementById('loading');
 const searchInput = document.getElementById('search-input');
+const themeToggle = document.getElementById('theme-toggle');
 
 // Fetch quotes from JSON
 async function loadQuotes() {
@@ -233,10 +235,8 @@ document.addEventListener('mousemove', (e) => {
     if (isDragging) {
         const deltaX = e.clientX - dragStartX;
         const deltaY = e.clientY - dragStartY;
-
         offsetX = dragStartOffsetX + deltaX;
         offsetY = dragStartOffsetY + deltaY;
-
         updateCardPositions();
     }
 });
@@ -244,6 +244,31 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('mouseup', () => {
     isDragging = false;
 });
+
+// Touch events
+board.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+        isDragging = true;
+        dragStartX = e.touches[0].clientX;
+        dragStartY = e.touches[0].clientY;
+        dragStartOffsetX = offsetX;
+        dragStartOffsetY = offsetY;
+    }
+}, { passive: true });
+
+board.addEventListener('touchmove', (e) => {
+    if (isDragging && e.touches.length === 1) {
+        const deltaX = e.touches[0].clientX - dragStartX;
+        const deltaY = e.touches[0].clientY - dragStartY;
+        offsetX = dragStartOffsetX + deltaX;
+        offsetY = dragStartOffsetY + deltaY;
+        updateCardPositions();
+    }
+}, { passive: true });
+
+board.addEventListener('touchend', () => {
+    isDragging = false;
+}, { passive: true });
 
 // Handle window resize
 window.addEventListener('resize', () => {
@@ -298,6 +323,20 @@ function createEmojiPattern() {
     document.body.insertBefore(emojiPattern, document.body.firstChild);
 }
 
+// Theme toggle
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+    }
+}
+
+themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    const isLight = document.body.classList.contains('light-mode');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+});
+
 // Search functionality
 searchInput.addEventListener('input', (e) => {
     searchTerm = e.target.value;
@@ -305,5 +344,6 @@ searchInput.addEventListener('input', (e) => {
 });
 
 // Initialize
+initTheme();
 createEmojiPattern();
 loadQuotes();
