@@ -2,6 +2,7 @@
 let allQuotes = [];
 const profileCache = {};
 let cards = [];
+let searchTerm = '';
 
 // Camera/View state
 let offsetX = 0;
@@ -33,6 +34,7 @@ let dragStartOffsetY = 0;
 const board = document.getElementById('board');
 const cardsContainer = document.getElementById('cards-container');
 const loading = document.getElementById('loading');
+const searchInput = document.getElementById('search-input');
 
 // Fetch quotes from JSON
 async function loadQuotes() {
@@ -49,22 +51,33 @@ async function loadQuotes() {
     }
 }
 
+// Filter quotes based on search term
+function getFilteredQuotes() {
+    if (!searchTerm) return allQuotes;
+    const term = searchTerm.toLowerCase();
+    return allQuotes.filter(q => 
+        q.quote.toLowerCase().includes(term) ||
+        q.githubUsername.toLowerCase().includes(term) ||
+        (q.date && q.date.includes(term))
+    );
+}
+
 // Generate card positions in a grid
 function generateCards() {
     cards = [];
+    const filteredQuotes = getFilteredQuotes();
     const cols = 4;
-    const rows = 4;
+    const rows = Math.ceil(filteredQuotes.length / cols);
 
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
             const cardIndex = row * cols + col;
 
-            // Stop if we've used all available quotes
-            if (cardIndex >= allQuotes.length) {
+            if (cardIndex >= filteredQuotes.length) {
                 continue;
             }
 
-            const quote = allQuotes[cardIndex];
+            const quote = filteredQuotes[cardIndex];
 
             const x = col * GRID_SPACING;
             const y = row * GRID_SPACING;
@@ -82,7 +95,6 @@ function generateCards() {
         }
     }
 
-    // Create DOM elements for cards
     createCardElements();
     focusRandomCard();
     updateCardPositions();
@@ -285,6 +297,12 @@ function createEmojiPattern() {
 
     document.body.insertBefore(emojiPattern, document.body.firstChild);
 }
+
+// Search functionality
+searchInput.addEventListener('input', (e) => {
+    searchTerm = e.target.value;
+    generateCards();
+});
 
 // Initialize
 createEmojiPattern();
