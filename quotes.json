@@ -8,5 +8,75 @@
     "quote": "until it's done, tell none.",
     "githubUsername": "grapongz",
     "date": "22-10-2025"
+  },
+  {
+    "quote": "Code never lies, comments sometimes do.",
+    "githubUsername": "torvalds",
+    "date": "23-10-2025"
+  },
+  {
+    "quote": "Talk is cheap. Show me the code.",
+    "githubUsername": "torvalds",
+    "date": "23-10-2025"
+  },
+  {
+    "quote": "First, solve the problem. Then, write the code.",
+    "githubUsername": "john-carmack",
+    "date": "23-10-2025"
+  },
+  {
+    "quote": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
+    "githubUsername": "martinfowler",
+    "date": "23-10-2025"
+  },
+  {
+    "quote": "The best error message is the one that never shows up.",
+    "githubUsername": "thomasfuchs",
+    "date": "23-10-2025"
+  },
+  {
+    "quote": "Debugging is twice as hard as writing the code in the first place.",
+    "githubUsername": "briandfoy",
+    "date": "23-10-2025"
+  },
+  {
+    "quote": "Make it work, make it right, make it fast.",
+    "githubUsername": "kentbeck",
+    "date": "23-10-2025"
+  },
+  {
+    "quote": "Code is like humor. When you have to explain it, it's bad.",
+    "githubUsername": "evancz",
+    "date": "23-10-2025"
+  },
+  {
+    "quote": "There are only two hard things in Computer Science: cache invalidation and naming things.",
+    "githubUsername": "philkarlton",
+    "date": "23-10-2025"
+  },
+  {
+    "quote": "Premature optimization is the root of all evil.",
+    "githubUsername": "knuthde",
+    "date": "23-10-2025"
+  },
+  {
+    "quote": "It's not a bug – it's an undocumented feature.",
+    "githubUsername": "github",
+    "date": "23-10-2025"
+  },
+  {
+    "quote": "The only way to learn a new programming language is by writing programs in it.",
+    "githubUsername": "dmritchie",
+    "date": "23-10-2025"
+  },
+  {
+    "quote": "Simplicity is the soul of efficiency.",
+    "githubUsername": "austinfrench",
+    "date": "23-10-2025"
+  },
+  {
+    "quote": "Good code is its own best documentation.",
+    "githubUsername": "stevemcconnell",
+    "date": "23-10-2025"
   }
 ]
