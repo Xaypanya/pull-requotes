@@ -260,13 +260,13 @@ body.light-mode .card-back {
     animation: confetti-fall 3s linear forwards;
 }
 
-@keyframes confetti-fall {
+@keyframes burst-fall {
     0% {
-        transform: translateY(-10px) rotate(0deg);
+        transform: translate(0, 0) rotate(0deg);
         opacity: 1;
     }
     100% {
-        transform: translateY(100vh) rotate(720deg);
+        transform: translate(var(--dx, 0), 100vh) rotate(360deg);
         opacity: 0;
     }
 }
