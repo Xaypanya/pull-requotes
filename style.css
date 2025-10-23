@@ -54,6 +54,19 @@ body.light-mode #emoji-pattern {
     cursor: pointer;
     font-family: 'Fuzzy Bubbles', sans-serif;
     perspective: 1000px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) rotate(var(--rotation, -2deg));
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) rotate(var(--rotation, -2deg));
+    }
 }
 
 .card-inner {
@@ -227,13 +240,52 @@ body.light-mode .card-back {
 .quote-card:hover .card-front,
 .quote-card:hover .card-back {
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                0 0 30px rgba(255, 215, 155, 0.6);
+    animation: gentle-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes gentle-glow {
+    0% { box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 20px rgba(255, 215, 155, 0.4); }
+    100% { box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 215, 155, 0.8); }
+}
+
+.confetti {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 50%;
+    animation: confetti-fall 3s linear forwards;
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
 }
 
 body.light-mode .quote-card:hover .card-front,
 body.light-mode .quote-card:hover .card-back {
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                0 0 30px rgba(255, 193, 7, 0.4);
+}
+
+body.light-mode .quote-card:hover .card-front,
+body.light-mode .quote-card:hover .card-back {
+    animation: gentle-glow-light 2s ease-in-out infinite alternate;
+}
+
+@keyframes gentle-glow-light {
+    0% { box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 193, 7, 0.3); }
+    100% { box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 193, 7, 0.6); }
 }
 
 .quote-card:nth-child(1) { --rotation: -3deg; }
