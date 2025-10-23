@@ -355,8 +355,15 @@ body.light-mode .quote-card:hover .card-back {
 }
 
 .card-back .quote-date {
-    font-size: 14px;
-    margin-top: 10px;
+    font-size: 12px;
+    color: #666;
+    font-weight: 400;
+    font-style: italic;
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 .quote-date {
