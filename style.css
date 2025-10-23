@@ -54,6 +54,19 @@ body.light-mode #emoji-pattern {
     cursor: pointer;
     font-family: 'Fuzzy Bubbles', sans-serif;
     perspective: 1000px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) rotate(var(--rotation, -2deg));
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) rotate(var(--rotation, -2deg));
+    }
 }
 
 .card-inner {

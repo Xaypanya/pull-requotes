@@ -8,6 +8,11 @@ let searchTerm = '';
 let offsetX = 0;
 let offsetY = 0;
 
+// Auto-scroll state
+let autoScrollInterval = null;
+let currentCardIndex = 0;
+let isAutoScrolling = false;
+
 // Card dimensions (responsive)
 function getCardDimensions() {
     const width = window.innerWidth;
@@ -98,15 +103,18 @@ function generateCards() {
     }
 
     createCardElements();
-    focusRandomCard();
+    centerAllCards();
     updateCardPositions();
+    
+    // Start auto-scroll if cards fit on screen
+    checkAndStartAutoScroll();
 }
 
 // Create card DOM elements
 function createCardElements() {
     cardsContainer.innerHTML = '';
 
-    for (const card of cards) {
+    cards.forEach((card, cardIndex) => {
         const cardEl = document.createElement('div');
         cardEl.className = 'quote-card';
 
@@ -150,9 +158,12 @@ function createCardElements() {
             }
         });
 
+        // Add staggered animation delay
+        cardEl.style.animationDelay = `${cardIndex * 0.1}s`;
+        
         card.element = cardEl;
         cardsContainer.appendChild(cardEl);
-    }
+    });
 
     // Fetch GitHub profiles
     fetchProfiles();
@@ -170,6 +181,30 @@ function focusRandomCard() {
     // Calculate offset to center the card
     offsetX = windowCenterX - (randomCard.x + CARD_WIDTH / 2);
     offsetY = windowCenterY - (randomCard.y + CARD_HEIGHT / 2);
+}
+
+// Center view to show all cards
+function centerAllCards() {
+    if (cards.length === 0) return;
+    
+    let minX = Infinity, maxX = -Infinity;
+    let minY = Infinity, maxY = -Infinity;
+    
+    cards.forEach(card => {
+        minX = Math.min(minX, card.x);
+        maxX = Math.max(maxX, card.x + card.width);
+        minY = Math.min(minY, card.y);
+        maxY = Math.max(maxY, card.y + card.height);
+    });
+    
+    const centerX = (minX + maxX) / 2;
+    const centerY = (minY + maxY) / 2;
+    
+    const windowCenterX = window.innerWidth / 2;
+    const windowCenterY = window.innerHeight / 2;
+    
+    offsetX = windowCenterX - centerX;
+    offsetY = windowCenterY - centerY;
 }
 
 // Fetch GitHub profiles and repos
@@ -261,6 +296,7 @@ function updateCardPositions() {
 
 // Mouse events
 board.addEventListener('mousedown', (e) => {
+    stopAutoScroll(); // Stop auto-scroll when user interacts
     isDragging = true;
     dragStartX = e.clientX;
     dragStartY = e.clientY;
@@ -285,6 +321,7 @@ document.addEventListener('mouseup', () => {
 // Touch events
 board.addEventListener('touchstart', (e) => {
     if (e.touches.length === 1) {
+        stopAutoScroll(); // Stop auto-scroll when user interacts
         isDragging = true;
         dragStartX = e.touches[0].clientX;
         dragStartY = e.touches[0].clientY;
@@ -382,26 +419,31 @@ document.addEventListener('keydown', (e) => {
     switch(e.key) {
         case 'ArrowUp':
             e.preventDefault();
+            stopAutoScroll(); // Stop auto-scroll when user navigates
             offsetY += step;
             updateCardPositions();
             break;
         case 'ArrowDown':
             e.preventDefault();
+            stopAutoScroll();
             offsetY -= step;
             updateCardPositions();
             break;
         case 'ArrowLeft':
             e.preventDefault();
+            stopAutoScroll();
             offsetX += step;
             updateCardPositions();
             break;
         case 'ArrowRight':
             e.preventDefault();
+            stopAutoScroll();
             offsetX -= step;
             updateCardPositions();
             break;
         case ' ':
             e.preventDefault();
+            stopAutoScroll();
             focusRandomCard();
             updateCardPositions();
             break;
@@ -447,6 +489,95 @@ board.addEventListener('click', (e) => {
         createConfetti();
     }
 });
+
+// Auto-scroll functionality
+function checkAndStartAutoScroll() {
+    stopAutoScroll();
+    
+    if (cards.length === 0) return;
+    
+    // Check if all cards can fit on screen
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    let minX = Infinity, maxX = -Infinity;
+    let minY = Infinity, maxY = -Infinity;
+    
+    cards.forEach(card => {
+        minX = Math.min(minX, card.x);
+        maxX = Math.max(maxX, card.x + card.width);
+        minY = Math.min(minY, card.y);
+        maxY = Math.max(maxY, card.y + card.height);
+    });
+    
+    const totalWidth = maxX - minX;
+    const totalHeight = maxY - minY;
+    
+    // If cards fit reasonably on screen, start auto-scroll
+    // More generous threshold to enable auto-scroll for more cards
+    if (totalWidth < viewportWidth * 1.5 && totalHeight < viewportHeight * 1.5) {
+        startAutoScroll();
+    }
+}
+
+function startAutoScroll() {
+    if (isAutoScrolling || cards.length <= 1) return;
+    
+    isAutoScrolling = true;
+    currentCardIndex = 0;
+    
+    autoScrollInterval = setInterval(() => {
+        focusOnCard(currentCardIndex);
+        currentCardIndex = (currentCardIndex + 1) % cards.length;
+    }, 4000); // Change card every 4 seconds
+}
+
+function stopAutoScroll() {
+    if (autoScrollInterval) {
+        clearInterval(autoScrollInterval);
+        autoScrollInterval = null;
+    }
+    isAutoScrolling = false;
+}
+
+function focusOnCard(index) {
+    if (index >= cards.length) return;
+    
+    const card = cards[index];
+    const windowCenterX = window.innerWidth / 2;
+    const windowCenterY = window.innerHeight / 2;
+    
+    // Calculate offset to center the card with smooth transition
+    const targetOffsetX = windowCenterX - (card.x + CARD_WIDTH / 2);
+    const targetOffsetY = windowCenterY - (card.y + CARD_HEIGHT / 2);
+    
+    // Smooth transition
+    const startOffsetX = offsetX;
+    const startOffsetY = offsetY;
+    const duration = 2000; // 2 second transition
+    const startTime = Date.now();
+    
+    function animate() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Smoother easing function (ease-in-out)
+        const easeProgress = progress < 0.5 
+            ? 2 * progress * progress 
+            : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+        
+        offsetX = startOffsetX + (targetOffsetX - startOffsetX) * easeProgress;
+        offsetY = startOffsetY + (targetOffsetY - startOffsetY) * easeProgress;
+        
+        updateCardPositions();
+        
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        }
+    }
+    
+    animate();
+}
 
 // Initialize
 initTheme();
