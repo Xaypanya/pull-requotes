@@ -256,6 +256,11 @@ body.light-mode .quote-card:hover {
     flex-shrink: 0;
 }
 
+.profile-avatar.placeholder {
+    background: #e0e0e0;
+    opacity: 0.7;
+}
+
 .profile-info {
     flex: 1;
     min-width: 0;

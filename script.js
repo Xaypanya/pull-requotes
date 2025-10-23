@@ -116,7 +116,7 @@ function createCardElements() {
             <div class="quote-author">— @${card.quote.githubUsername}</div>
             <div class="profile">
                 <a href="https://github.com/${card.quote.githubUsername}" target="_blank" class="profile-avatar-link">
-                    <img class="profile-avatar" src="https://github.com/${card.quote.githubUsername}.png" alt="${card.quote.githubUsername}">
+                    <img class="profile-avatar" src="https://github.com/${card.quote.githubUsername}.png" alt="${card.quote.githubUsername}" onerror="this.src='img/pull-requotes.png'; this.classList.add('placeholder');">
                 </a>
                 <div class="profile-info">
                     <a href="https://github.com/${card.quote.githubUsername}" target="_blank" class="profile-name-link">
