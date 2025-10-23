@@ -12,6 +12,8 @@ let offsetY = 0;
 let autoScrollInterval = null;
 let currentCardIndex = 0;
 let isAutoScrolling = false;
+let restartTimeout = null;
+let canAutoScroll = false;
 
 // Card dimensions (responsive)
 function getCardDimensions() {
@@ -316,6 +318,7 @@ document.addEventListener('mousemove', (e) => {
 
 document.addEventListener('mouseup', () => {
     isDragging = false;
+    checkAndReturnToCards();
 });
 
 // Touch events
@@ -342,6 +345,7 @@ board.addEventListener('touchmove', (e) => {
 
 board.addEventListener('touchend', () => {
     isDragging = false;
+    checkAndReturnToCards();
 }, { passive: true });
 
 // Handle window resize
@@ -513,10 +517,13 @@ function checkAndStartAutoScroll() {
     const totalWidth = maxX - minX;
     const totalHeight = maxY - minY;
     
-    // If cards fit reasonably on screen, start auto-scroll
+    // If cards fit reasonably on screen, enable auto-scroll
     // More generous threshold to enable auto-scroll for more cards
     if (totalWidth < viewportWidth * 1.5 && totalHeight < viewportHeight * 1.5) {
+        canAutoScroll = true;
         startAutoScroll();
+    } else {
+        canAutoScroll = false;
     }
 }
 
@@ -527,6 +534,12 @@ function startAutoScroll() {
     currentCardIndex = 0;
     
     autoScrollInterval = setInterval(() => {
+        // Check if all cards are already visible
+        if (areAllCardsVisible()) {
+            stopAutoScroll();
+            return;
+        }
+        
         focusOnCard(currentCardIndex);
         currentCardIndex = (currentCardIndex + 1) % cards.length;
     }, 4000); // Change card every 4 seconds
@@ -538,6 +551,18 @@ function stopAutoScroll() {
         autoScrollInterval = null;
     }
     isAutoScrolling = false;
+    
+    // Clear any existing restart timeout
+    if (restartTimeout) {
+        clearTimeout(restartTimeout);
+    }
+    
+    // Set timeout to restart auto-scroll after 5 seconds of inactivity
+    if (canAutoScroll) {
+        restartTimeout = setTimeout(() => {
+            startAutoScroll();
+        }, 5000);
+    }
 }
 
 function focusOnCard(index) {
@@ -577,6 +602,102 @@ function focusOnCard(index) {
     }
     
     animate();
+}
+
+// Check if user is in empty space and return to cards
+function checkAndReturnToCards() {
+    if (cards.length === 0) return;
+    
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Check if any card is visible in viewport
+    let hasVisibleCard = false;
+    
+    for (const card of cards) {
+        const cardLeft = card.x + offsetX;
+        const cardRight = cardLeft + card.width;
+        const cardTop = card.y + offsetY;
+        const cardBottom = cardTop + card.height;
+        
+        // Check if card overlaps with viewport
+        if (cardRight > 0 && cardLeft < viewportWidth && 
+            cardBottom > 0 && cardTop < viewportHeight) {
+            hasVisibleCard = true;
+            break;
+        }
+    }
+    
+    // If no cards are visible, smoothly return to center immediately
+    if (!hasVisibleCard) {
+        const startOffsetX = offsetX;
+        const startOffsetY = offsetY;
+        
+        // Calculate target position to center all cards
+        let minX = Infinity, maxX = -Infinity;
+        let minY = Infinity, maxY = -Infinity;
+        
+        cards.forEach(card => {
+            minX = Math.min(minX, card.x);
+            maxX = Math.max(maxX, card.x + card.width);
+            minY = Math.min(minY, card.y);
+            maxY = Math.max(maxY, card.y + card.height);
+        });
+        
+        const centerX = (minX + maxX) / 2;
+        const centerY = (minY + maxY) / 2;
+        const windowCenterX = window.innerWidth / 2;
+        const windowCenterY = window.innerHeight / 2;
+        
+        const targetOffsetX = windowCenterX - centerX;
+        const targetOffsetY = windowCenterY - centerY;
+        
+        const duration = 1000;
+        const startTime = Date.now();
+        
+        function animate() {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            const easeProgress = progress < 0.5 
+                ? 2 * progress * progress 
+                : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+            
+            offsetX = startOffsetX + (targetOffsetX - startOffsetX) * easeProgress;
+            offsetY = startOffsetY + (targetOffsetY - startOffsetY) * easeProgress;
+            
+            updateCardPositions();
+            
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        }
+        
+        animate();
+    }
+}
+
+// Check if all cards are visible in viewport
+function areAllCardsVisible() {
+    if (cards.length === 0) return true;
+    
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    for (const card of cards) {
+        const cardLeft = card.x + offsetX;
+        const cardRight = cardLeft + card.width;
+        const cardTop = card.y + offsetY;
+        const cardBottom = cardTop + card.height;
+        
+        // If any card is not fully visible, return false
+        if (cardLeft < 0 || cardRight > viewportWidth || 
+            cardTop < 0 || cardBottom > viewportHeight) {
+            return false;
+        }
+    }
+    
+    return true;
 }
 
 // Initialize
