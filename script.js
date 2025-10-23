@@ -365,16 +365,14 @@ function createEmojiPattern() {
     emojiPattern.id = 'emoji-pattern';
     emojiPattern.style.cssText = `
         position: fixed;
-        top: -50%;
-        left: -50%;
-        width: 200vw;
-        height: 200vh;
+        top: -100%;
+        left: -100%;
+        width: 300vw;
+        height: 300vh;
         pointer-events: none;
         z-index: 0;
         overflow: hidden;
         opacity: 0.05;
-        transform: rotate(30deg);
-        transform-origin: center center;
     `;
 
     const season = detectSeason();
@@ -403,19 +401,20 @@ function createEmojiPattern() {
             emojis = ['💻', '⭐'];
     }
 
-    const cols = Math.ceil(window.innerWidth * 2 / 80);
-    const rows = Math.ceil(window.innerHeight * 2 / 80);
+    const cols = Math.ceil(window.innerWidth * 3 / 50);
+    const rows = Math.ceil(window.innerHeight * 3 / 50);
 
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
             const emoji = document.createElement('span');
             emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
             const rotation = (Math.random() - 0.5) * 60;
+            const offsetX = (i % 2) * 25;
             emoji.style.cssText = `
                 position: absolute;
-                left: ${j * 80}px;
-                top: ${i * 80}px;
-                font-size: 30px;
+                left: ${j * 50 + offsetX}px;
+                top: ${i * 50}px;
+                font-size: 24px;
                 user-select: none;
                 transform: rotate(${rotation}deg);
             `;
@@ -813,6 +812,11 @@ class ParticleSystem {
     }
     
     addParticles() {
+        // Limit total particles to prevent performance issues
+        if (this.particles.length > 50) {
+            this.particles.splice(0, 15); // Remove oldest particles
+        }
+        
         for (let i = 0; i < 15; i++) {
             this.particles.push(this.createParticle());
         }
