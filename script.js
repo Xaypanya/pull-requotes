@@ -423,6 +423,31 @@ searchInput.addEventListener('input', (e) => {
     generateCards();
 });
 
+// Background confetti easter egg
+function createConfetti() {
+    const colors = ['#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6', '#f1c40f'];
+    
+    for (let i = 0; i < 20; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.top = '-10px';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 2 + 's';
+        
+        document.body.appendChild(confetti);
+        
+        setTimeout(() => confetti.remove(), 5000);
+    }
+}
+
+// Background single-click for confetti
+board.addEventListener('click', (e) => {
+    if (e.target === board || e.target === cardsContainer) {
+        createConfetti();
+    }
+});
+
 // Initialize
 initTheme();
 createEmojiPattern();
