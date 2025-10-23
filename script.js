@@ -365,10 +365,10 @@ function createEmojiPattern() {
     emojiPattern.id = 'emoji-pattern';
     emojiPattern.style.cssText = `
         position: fixed;
-        top: -100%;
-        left: -100%;
-        width: 300vw;
-        height: 300vh;
+        top: -400%;
+        left: -400%;
+        width: 1000vw;
+        height: 1000vh;
         pointer-events: none;
         z-index: 0;
         overflow: hidden;
@@ -401,20 +401,20 @@ function createEmojiPattern() {
             emojis = ['💻', '⭐'];
     }
 
-    const cols = Math.ceil(window.innerWidth * 3 / 50);
-    const rows = Math.ceil(window.innerHeight * 3 / 50);
+    const cols = Math.ceil(window.innerWidth * 10 / 40);
+    const rows = Math.ceil(window.innerHeight * 10 / 40);
 
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
             const emoji = document.createElement('span');
             emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
             const rotation = (Math.random() - 0.5) * 60;
-            const offsetX = (i % 2) * 25;
+            const offsetX = (i % 2) * 20;
             emoji.style.cssText = `
                 position: absolute;
-                left: ${j * 50 + offsetX}px;
-                top: ${i * 50}px;
-                font-size: 24px;
+                left: ${j * 40 + offsetX}px;
+                top: ${i * 40}px;
+                font-size: 20px;
                 user-select: none;
                 transform: rotate(${rotation}deg);
             `;
