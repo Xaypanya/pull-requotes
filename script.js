@@ -19,9 +19,9 @@ let canAutoScroll = false;
 function getCardDimensions() {
     const width = window.innerWidth;
     if (width <= 480) {
-        return { width: 240, height: 280, spacing: 280 };
+        return { width: 240, height: 280, spacing: 350 };
     } else if (width <= 768) {
-        return { width: 280, height: 320, spacing: 320 };
+        return { width: 280, height: 320, spacing: 400 };
     }
     return { width: 450, height: 380, spacing: 500 };
 }
@@ -75,7 +75,18 @@ function getFilteredQuotes() {
 function generateCards() {
     cards = [];
     const filteredQuotes = getFilteredQuotes();
-    const cols = 4;
+
+    // Responsive column count based on screen width
+    const width = window.innerWidth;
+    let cols;
+    if (width <= 480) {
+        cols = 2; // Two columns on mobile
+    } else if (width <= 768) {
+        cols = 2; // Two columns on tablet
+    } else {
+        cols = 4; // Four columns on desktop
+    }
+
     const rows = Math.ceil(filteredQuotes.length / cols);
 
     for (let row = 0; row < rows; row++) {
@@ -517,9 +528,8 @@ function checkAndStartAutoScroll() {
     const totalWidth = maxX - minX;
     const totalHeight = maxY - minY;
     
-    // If cards fit reasonably on screen, enable auto-scroll
-    // More generous threshold to enable auto-scroll for more cards
-    if (totalWidth < viewportWidth * 1.5 && totalHeight < viewportHeight * 1.5) {
+    // Enable auto-scroll for all screen sizes if there are more than 2 cards
+    if (cards.length > 2) {
         canAutoScroll = true;
         startAutoScroll();
     } else {
