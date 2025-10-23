@@ -669,3 +669,13 @@ body.light-mode #keyboard-hint {
     border-color: rgba(66, 153, 225, 0.4);
     color: #718096;
 }
+
+#particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}

@@ -700,7 +700,181 @@ function areAllCardsVisible() {
     return true;
 }
 
+// Particle System
+class ParticleSystem {
+    constructor() {
+        this.canvas = document.getElementById('particles');
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.season = this.detectSeason();
+        this.resize();
+        this.init();
+        
+        window.addEventListener('resize', () => this.resize());
+    }
+    
+    detectSeason() {
+        const now = new Date();
+        const month = now.getMonth() + 1;
+        const day = now.getDate();
+        
+        // Lunar New Year (approx Jan 21 - Feb 20)
+        if ((month === 1 && day >= 21) || (month === 2 && day <= 20)) {
+            return 'lunar';
+        }
+        
+        // Songkran/Pi Mai Lao (Apr 13-17)
+        if (month === 4 && day >= 13 && day <= 17) {
+            return 'songkran';
+        }
+        
+        // Seasons
+        if (month >= 3 && month <= 5) return 'spring';
+        if (month >= 6 && month <= 8) return 'summer';
+        if (month >= 9 && month <= 11) return 'autumn';
+        return 'winter';
+    }
+    
+    resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    }
+    
+    init() {
+        this.particles = [];
+        for (let i = 0; i < 30; i++) {
+            this.particles.push(this.createParticle());
+        }
+        this.animate();
+    }
+    
+    createParticle() {
+        const particle = {
+            x: Math.random() * this.canvas.width,
+            y: -20,
+            vx: (Math.random() - 0.5) * 2,
+            vy: Math.random() * 2 + 1,
+            rotation: Math.random() * Math.PI * 2,
+            rotationSpeed: (Math.random() - 0.5) * 0.1,
+            size: Math.random() * 8 + 4,
+            opacity: Math.random() * 0.8 + 0.2
+        };
+        
+        switch (this.season) {
+            case 'autumn':
+                particle.color = ['#ff6b35', '#f7931e', '#ffb347', '#d2691e'][Math.floor(Math.random() * 4)];
+                particle.shape = 'leaf';
+                break;
+            case 'winter':
+                particle.color = '#ffffff';
+                particle.shape = 'snowflake';
+                particle.vy *= 0.5;
+                break;
+            case 'spring':
+                particle.color = ['#ffb6c1', '#ffc0cb', '#ffffff'][Math.floor(Math.random() * 3)];
+                particle.shape = 'petal';
+                break;
+            case 'summer':
+                particle.color = '#4a90e2';
+                particle.shape = 'drop';
+                particle.vy *= 1.5;
+                break;
+            case 'songkran':
+                particle.color = '#4a90e2';
+                particle.shape = 'splash';
+                particle.vy *= 2;
+                break;
+            case 'lunar':
+                particle.color = ['#ff0000', '#ffd700'][Math.floor(Math.random() * 2)];
+                particle.shape = 'spark';
+                particle.vx *= 2;
+                break;
+        }
+        
+        return particle;
+    }
+    
+    drawParticle(particle) {
+        this.ctx.save();
+        this.ctx.globalAlpha = particle.opacity;
+        this.ctx.translate(particle.x, particle.y);
+        this.ctx.rotate(particle.rotation);
+        
+        switch (particle.shape) {
+            case 'leaf':
+                this.ctx.fillStyle = particle.color;
+                this.ctx.beginPath();
+                this.ctx.ellipse(0, 0, particle.size, particle.size * 0.6, 0, 0, Math.PI * 2);
+                this.ctx.fill();
+                break;
+            case 'snowflake':
+                this.ctx.strokeStyle = particle.color;
+                this.ctx.lineWidth = 1;
+                for (let i = 0; i < 6; i++) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(0, 0);
+                    this.ctx.lineTo(0, -particle.size);
+                    this.ctx.stroke();
+                    this.ctx.rotate(Math.PI / 3);
+                }
+                break;
+            case 'petal':
+                this.ctx.fillStyle = particle.color;
+                this.ctx.beginPath();
+                this.ctx.arc(0, 0, particle.size * 0.8, 0, Math.PI * 2);
+                this.ctx.fill();
+                break;
+            case 'drop':
+                this.ctx.fillStyle = particle.color;
+                this.ctx.beginPath();
+                this.ctx.arc(0, particle.size * 0.3, particle.size * 0.7, 0, Math.PI * 2);
+                this.ctx.fill();
+                break;
+            case 'splash':
+                this.ctx.fillStyle = particle.color;
+                this.ctx.beginPath();
+                this.ctx.arc(0, 0, particle.size, 0, Math.PI * 2);
+                this.ctx.fill();
+                break;
+            case 'spark':
+                this.ctx.fillStyle = particle.color;
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, -particle.size);
+                this.ctx.lineTo(particle.size * 0.3, 0);
+                this.ctx.lineTo(0, particle.size);
+                this.ctx.lineTo(-particle.size * 0.3, 0);
+                this.ctx.closePath();
+                this.ctx.fill();
+                break;
+        }
+        
+        this.ctx.restore();
+    }
+    
+    animate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            const particle = this.particles[i];
+            
+            particle.x += particle.vx;
+            particle.y += particle.vy;
+            particle.rotation += particle.rotationSpeed;
+            
+            if (particle.y > this.canvas.height + 20 || 
+                particle.x < -20 || particle.x > this.canvas.width + 20) {
+                this.particles[i] = this.createParticle();
+            } else {
+                this.drawParticle(particle);
+            }
+        }
+        
+        requestAnimationFrame(() => this.animate());
+    }
+}
+
 // Initialize
 initTheme();
 createEmojiPattern();
 loadQuotes();
+new ParticleSystem();
