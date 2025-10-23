@@ -49,21 +49,55 @@ body.light-mode #emoji-pattern {
     position: absolute;
     width: 450px;
     height: 380px;
+    transform: rotate(var(--rotation, -2deg));
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    font-family: 'Fuzzy Bubbles', sans-serif;
+    perspective: 1000px;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.quote-card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
     background: linear-gradient(135deg, #ffd89b 0%, #fffacd 100%);
     border-radius: 4px;
     padding: 25px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5),
                 inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    transform: rotate(var(--rotation, -2deg));
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    font-family: 'Fuzzy Bubbles', sans-serif;
 }
 
-body.light-mode .quote-card {
+.card-front {
+    justify-content: center;
+    text-align: center;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+body.light-mode .card-front,
+body.light-mode .card-back {
     background: linear-gradient(135deg, #fff5e1 0%, #fffef7 100%);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15),
                 inset 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -73,6 +107,9 @@ body.light-mode .quote-card {
     .quote-card {
         width: 280px;
         height: 320px;
+    }
+
+    .card-front, .card-back {
         padding: 20px;
     }
 
@@ -107,6 +144,9 @@ body.light-mode .quote-card {
     .quote-card {
         width: 240px;
         height: 280px;
+    }
+
+    .card-front, .card-back {
         padding: 15px;
     }
 
@@ -182,11 +222,16 @@ body.light-mode .quote-card {
 
 .quote-card:hover {
     transform: rotate(0deg) translateY(-15px);
+}
+
+.quote-card:hover .card-front,
+.quote-card:hover .card-back {
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
                 inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
-body.light-mode .quote-card:hover {
+body.light-mode .quote-card:hover .card-front,
+body.light-mode .quote-card:hover .card-back {
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2),
                 inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
@@ -207,8 +252,12 @@ body.light-mode .quote-card:hover {
     font-weight: 500;
     line-height: 1.7;
     color: #2d2d2d;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     word-wrap: break-word;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .quote-author {
@@ -218,13 +267,44 @@ body.light-mode .quote-card:hover {
     font-weight: 600;
 }
 
-.profile {
+.card-front .profile {
     display: flex;
     align-items: flex-start;
     gap: 12px;
     padding-top: 12px;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     margin-top: auto;
+}
+
+.card-back .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    text-align: center;
+}
+
+.flip-hint {
+    color: #999;
+    font-size: 10px;
+    text-align: center;
+    margin-top: 10px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.quote-card:hover .flip-hint {
+    opacity: 1;
+}
+
+.card-back .profile-avatar {
+    width: 80px;
+    height: 80px;
+}
+
+.card-back .quote-date {
+    font-size: 14px;
+    margin-top: 10px;
 }
 
 .quote-date {

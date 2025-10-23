@@ -111,19 +111,26 @@ function createCardElements() {
         cardEl.className = 'quote-card';
 
         cardEl.innerHTML = `
-            <button class="copy-btn" title="Copy quote">📋</button>
-            <div class="quote-text">"${card.quote.quote}"</div>
-            <div class="quote-author">— @${card.quote.githubUsername}</div>
-            <div class="profile">
-                <a href="https://github.com/${card.quote.githubUsername}" target="_blank" class="profile-avatar-link">
-                    <img class="profile-avatar" src="https://github.com/${card.quote.githubUsername}.png" alt="${card.quote.githubUsername}" onerror="this.src='img/pull-requotes.png'; this.classList.add('placeholder');">
-                </a>
-                <div class="profile-info">
-                    <a href="https://github.com/${card.quote.githubUsername}" target="_blank" class="profile-name-link">
-                        <div class="profile-name">Loading...</div>
-                    </a>
+            <div class="card-inner">
+                <div class="card-front">
+                    <button class="copy-btn" title="Copy quote">📋</button>
+                    <div class="quote-text">"${card.quote.quote}"</div>
+                    <div class="quote-author">— @${card.quote.githubUsername}</div>
+                    <div class="flip-hint">Click to flip</div>
                 </div>
-                <div class="quote-date">${card.quote.date || ''}</div>
+                <div class="card-back">
+                    <div class="profile">
+                        <a href="https://github.com/${card.quote.githubUsername}" target="_blank" class="profile-avatar-link">
+                            <img class="profile-avatar" src="https://github.com/${card.quote.githubUsername}.png" alt="${card.quote.githubUsername}" onerror="this.src='img/pull-requotes.png'; this.classList.add('placeholder');">
+                        </a>
+                        <div class="profile-info">
+                            <a href="https://github.com/${card.quote.githubUsername}" target="_blank" class="profile-name-link">
+                                <div class="profile-name">Loading...</div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="quote-date">${card.quote.date || ''}</div>
+                </div>
             </div>
         `;
 
@@ -134,6 +141,13 @@ function createCardElements() {
             navigator.clipboard.writeText(card.quote.quote);
             copyBtn.textContent = '✓';
             setTimeout(() => copyBtn.textContent = '📋', 1500);
+        });
+
+        // Card flip functionality
+        cardEl.addEventListener('click', (e) => {
+            if (!e.target.closest('.copy-btn, .profile-avatar-link, .profile-name-link')) {
+                cardEl.classList.toggle('flipped');
+            }
         });
 
         card.element = cardEl;
