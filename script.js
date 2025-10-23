@@ -139,7 +139,7 @@ function createCardElements() {
                             </a>
                         </div>
                     </div>
-                    <div class="quote-date">${card.quote.date || ''}</div>
+                    ${card.quote.date ? `<div class="quote-date">${card.quote.date}</div>` : ''}
                 </div>
             </div>
         `;
