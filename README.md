@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/Xaypanya/pull-requotes/blob/main/img/pull-requotes.png?raw=true" alt="Pull Requotes" width="150"/>
+  <img src="img/pull-requotes.png" alt="Pull Requotes" width="150"/>
 
   # Pull Requotes
 
@@ -7,6 +7,14 @@
 
   **🔗 Live :** https://xaypanya.github.io/pull-requotes
 
+</div>
+
+## Preview
+
+<div align="center">
+  <a href="https://xaypanya.github.io/pull-requotes" target="_blank">
+    <img src="img/pull-requotes-browser-preview.png" alt="Pull Requotes Browser Preview" width="100%"/>
+  </a>
 </div>
 
 🎉 **Perfect for Hacktoberfest!** Easy contributions, beginner-friendly, and your quote & profile will be displayed for everyone to see!
