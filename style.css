@@ -561,11 +561,13 @@ body.light-mode .quote-card:hover .card-back {
     align-items: center;
     gap: 10px;
     flex-shrink: 0;
+    margin-left: auto;
 }
 
 #search-container {
     flex: 1 1 auto;
     min-width: 0;
+    max-width: 500px;
     display: flex;
     align-items: center;
     background: rgba(22, 27, 34, 0.95);
