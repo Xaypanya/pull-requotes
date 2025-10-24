@@ -823,11 +823,11 @@ class ParticleSystem {
     
     addParticles() {
         // Limit total particles to prevent performance issues
-        if (this.particles.length > 50) {
-            this.particles.splice(0, 15); // Remove oldest particles
+        if (this.particles.length > 60) {
+            this.particles.splice(0, 12); // Remove oldest particles
         }
         
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 12; i++) {
             this.particles.push(this.createParticle());
         }
     }
@@ -885,27 +885,51 @@ class ParticleSystem {
         this.ctx.globalAlpha = particle.opacity;
         this.ctx.translate(particle.x, particle.y);
         this.ctx.rotate(particle.rotation);
-        this.ctx.font = `${particle.size * 2}px Arial`;
-        this.ctx.textAlign = 'center';
+        this.ctx.fillStyle = particle.color;
         
         switch (particle.shape) {
             case 'leaf':
-                this.ctx.fillText('🍂', 0, 0);
+                this.ctx.beginPath();
+                this.ctx.ellipse(0, 0, particle.size/3, particle.size/2, 0, 0, Math.PI * 2);
+                this.ctx.fill();
                 break;
             case 'snowflake':
-                this.ctx.fillText('❄️', 0, 0);
+                this.ctx.strokeStyle = particle.color;
+                this.ctx.lineWidth = 1;
+                for (let i = 0; i < 6; i++) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(0, 0);
+                    this.ctx.lineTo(0, -particle.size/2);
+                    this.ctx.stroke();
+                    this.ctx.rotate(Math.PI / 3);
+                }
                 break;
             case 'petal':
-                this.ctx.fillText('🌸', 0, 0);
+                this.ctx.beginPath();
+                this.ctx.ellipse(0, -particle.size/4, particle.size/4, particle.size/2, 0, 0, Math.PI * 2);
+                this.ctx.fill();
                 break;
             case 'sunflower':
-                this.ctx.fillText('🌻', 0, 0);
+                this.ctx.beginPath();
+                this.ctx.arc(0, 0, particle.size/3, 0, Math.PI * 2);
+                this.ctx.fill();
+                for (let i = 0; i < 8; i++) {
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(0, -particle.size/2, particle.size/6, particle.size/3, 0, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.rotate(Math.PI / 4);
+                }
                 break;
             case 'water':
-                this.ctx.fillText('💧', 0, 0);
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, -particle.size/2);
+                this.ctx.quadraticCurveTo(-particle.size/3, 0, 0, particle.size/2);
+                this.ctx.quadraticCurveTo(particle.size/3, 0, 0, -particle.size/2);
+                this.ctx.fill();
                 break;
             case 'lantern':
-                this.ctx.fillText('🏮', 0, 0);
+                this.ctx.fillRect(-particle.size/3, -particle.size/2, particle.size*2/3, particle.size);
+                this.ctx.fillRect(-particle.size/4, -particle.size/2-2, particle.size/2, 2);
                 break;
         }
         
@@ -913,20 +937,25 @@ class ParticleSystem {
     }
     
     animate() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.frameCount = (this.frameCount || 0) + 1;
         
-        for (let i = this.particles.length - 1; i >= 0; i--) {
-            const particle = this.particles[i];
+        // Only update every other frame for better performance
+        if (this.frameCount % 2 === 0) {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             
-            particle.x += particle.vx;
-            particle.y += particle.vy;
-            particle.rotation += particle.rotationSpeed;
-            
-            if (particle.y > this.canvas.height + 20 || 
-                particle.x < -20 || particle.x > this.canvas.width + 20) {
-                this.particles.splice(i, 1);
-            } else {
-                this.drawParticle(particle);
+            for (let i = this.particles.length - 1; i >= 0; i--) {
+                const particle = this.particles[i];
+                
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.rotation += particle.rotationSpeed;
+                
+                if (particle.y > this.canvas.height + 20 || 
+                    particle.x < -20 || particle.x > this.canvas.width + 20) {
+                    this.particles.splice(i, 1);
+                } else {
+                    this.drawParticle(particle);
+                }
             }
         }
         
