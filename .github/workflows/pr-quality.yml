@@ -1,0 +1,45 @@
+name: PR Quality Check
+
+on:
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  quality-check:
+    name: Check PR Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check minimum lines changed
+        run: |
+          echo "🔍 Checking PR quality..."
+
+          MEANINGFUL_LINES=$(git diff origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E "^[+-]" | grep -v "^[+-]\s*$" | wc -l)
+
+          echo "Lines changed: $MEANINGFUL_LINES"
+
+          if [ "$MEANINGFUL_LINES" -lt 3 ]; then
+            echo "❌ PR must change at least 3 meaningful lines"
+            echo "Current PR only changes $MEANINGFUL_LINES lines"
+            echo ""
+            echo "This helps prevent spam PRs. Please add more meaningful changes."
+            exit 1
+          fi
+
+          echo "✅ PR has $MEANINGFUL_LINES meaningful lines changed"
+
+      - name: Check for whitespace-only changes
+        run: |
+          echo "🔍 Checking for meaningful content..."
+
+          if git diff origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -q "^[+-].*[^ \t]"; then
+            echo "✅ Contains meaningful changes"
+          else
+            echo "❌ Only whitespace changes detected"
+            echo "Please add meaningful code/content changes"
+            exit 1
+          fi
