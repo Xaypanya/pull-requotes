@@ -143,7 +143,7 @@ Want to contribute code? We welcome all improvements!
 Thank you to all the amazing contributors who have made this project better! 🌟
 
 <a href="https://github.com/Xaypanya/pull-requotes/graphs/contributors">
-<img src="https://contrib.rocks/image?repo=Xaypanya/pull-requotes" alt="Pull Requotes Contributors"/>
+<img src="https://contrib.rocks/image?repo=Xaypanya/pull-requotes&t=1" alt="Pull Requotes Contributors"/>
 </a>
 
 Made with [contrib.rocks](https://contrib.rocks).
