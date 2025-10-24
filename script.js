@@ -370,38 +370,62 @@ window.addEventListener('resize', () => {
     generateCards();
 });
 
-// Create emoji background pattern
+// Create seasonal emoji background pattern
 function createEmojiPattern() {
     const emojiPattern = document.createElement('div');
     emojiPattern.id = 'emoji-pattern';
     emojiPattern.style.cssText = `
         position: fixed;
-        top: -50%;
-        left: -50%;
-        width: 200vw;
-        height: 200vh;
+        top: -400%;
+        left: -400%;
+        width: 1000vw;
+        height: 1000vh;
         pointer-events: none;
         z-index: 0;
         overflow: hidden;
         opacity: 0.05;
-        transform: rotate(30deg);
-        transform-origin: center center;
     `;
 
-    const emojis = ['💻', '⭐', '🚀', '💡', '🎨', '🔧', '⚡', '📦', '🐙', '✨'];
-    const cols = Math.ceil(window.innerWidth * 2 / 80);
-    const rows = Math.ceil(window.innerHeight * 2 / 80);
+    const season = detectSeason();
+    let emojis;
+    
+    switch (season) {
+        case 'autumn':
+            emojis = ['🍂', '🍁'];
+            break;
+        case 'winter':
+            emojis = ['❄️', '⛄'];
+            break;
+        case 'spring':
+            emojis = ['🌸', '🌺'];
+            break;
+        case 'summer':
+            emojis = ['🌻', '☀️'];
+            break;
+        case 'songkran':
+            emojis = ['💧', '🔫'];
+            break;
+        case 'lunar':
+            emojis = ['🏮', '🎆'];
+            break;
+        default:
+            emojis = ['💻', '⭐'];
+    }
+
+    const cols = Math.ceil(window.innerWidth * 10 / 40);
+    const rows = Math.ceil(window.innerHeight * 10 / 40);
 
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
             const emoji = document.createElement('span');
             emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            const rotation = (Math.random() - 0.5) * 60; // Random rotation between -30 and 30 degrees
+            const rotation = (Math.random() - 0.5) * 60;
+            const offsetX = (i % 2) * 20;
             emoji.style.cssText = `
                 position: absolute;
-                left: ${j * 80}px;
-                top: ${i * 80}px;
-                font-size: 30px;
+                left: ${j * 40 + offsetX}px;
+                top: ${i * 40}px;
+                font-size: 20px;
                 user-select: none;
                 transform: rotate(${rotation}deg);
             `;
@@ -410,6 +434,19 @@ function createEmojiPattern() {
     }
 
     document.body.insertBefore(emojiPattern, document.body.firstChild);
+}
+
+function detectSeason() {
+    const now = new Date();
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    
+    if ((month === 1 && day >= 21) || (month === 2 && day <= 20)) return 'lunar';
+    if (month === 4 && day >= 13 && day <= 17) return 'songkran';
+    if (month >= 3 && month <= 5) return 'spring';
+    if (month >= 6 && month <= 8) return 'summer';
+    if (month >= 9 && month <= 11) return 'autumn';
+    return 'winter';
 }
 
 // Theme toggle
@@ -480,28 +517,57 @@ searchInput.addEventListener('input', (e) => {
     generateCards();
 });
 
-// Background confetti easter egg
-function createConfetti() {
-    const colors = ['#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6', '#f1c40f'];
+// Seasonal particle burst on click
+function createSeasonalBurst(x, y) {
+    const season = particles.season;
     
-    for (let i = 0; i < 20; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = Math.random() * window.innerWidth + 'px';
-        confetti.style.top = '-10px';
-        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.animationDelay = Math.random() * 2 + 's';
+    for (let i = 0; i < 15; i++) {
+        const particle = document.createElement('div');
+        particle.style.cssText = `
+            position: fixed;
+            left: ${x}px;
+            top: ${y}px;
+            width: 8px;
+            height: 8px;
+            pointer-events: none;
+            z-index: 100;
+            animation: burst-fall 2s linear forwards;
+        `;
         
-        document.body.appendChild(confetti);
+        switch (season) {
+            case 'autumn':
+                particle.textContent = ['🍂', '🍁'][Math.floor(Math.random() * 2)];
+                break;
+            case 'winter':
+                particle.textContent = ['❄️', '⛄'][Math.floor(Math.random() * 2)];
+                break;
+            case 'spring':
+                particle.textContent = ['🌸', '🌺'][Math.floor(Math.random() * 2)];
+                break;
+            case 'summer':
+                particle.textContent = ['🌻', '☀️'][Math.floor(Math.random() * 2)];
+                break;
+            case 'songkran':
+                particle.textContent = ['💧', '🔫'][Math.floor(Math.random() * 2)];
+                break;
+            case 'lunar':
+                particle.textContent = ['🏮', '🎆'][Math.floor(Math.random() * 2)];
+                break;
+        }
         
-        setTimeout(() => confetti.remove(), 5000);
+        particle.style.fontSize = '16px';
+        particle.style.animationDelay = Math.random() * 0.5 + 's';
+        particle.style.setProperty('--dx', (Math.random() - 0.5) * 200 + 'px');
+        
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 2500);
     }
 }
 
-// Background single-click for confetti
+// Background single-click for seasonal particles
 board.addEventListener('click', (e) => {
     if (e.target === board || e.target === cardsContainer) {
-        createConfetti();
+        particles.addParticles();
     }
 });
 
@@ -710,7 +776,216 @@ function areAllCardsVisible() {
     return true;
 }
 
+// Particle System
+class ParticleSystem {
+    constructor() {
+        this.canvas = document.getElementById('particles');
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.season = this.detectSeason();
+        this.resize();
+        this.init();
+        
+        window.addEventListener('resize', () => this.resize());
+    }
+    
+    detectSeason() {
+        const now = new Date();
+        const month = now.getMonth() + 1;
+        const day = now.getDate();
+        
+        // Lunar New Year (approx Jan 21 - Feb 20)
+        if ((month === 1 && day >= 21) || (month === 2 && day <= 20)) {
+            return 'lunar';
+        }
+        
+        // Songkran/Pi Mai Lao (Apr 13-17)
+        if (month === 4 && day >= 13 && day <= 17) {
+            return 'songkran';
+        }
+        
+        // Seasons
+        if (month >= 3 && month <= 5) return 'spring';
+        if (month >= 6 && month <= 8) return 'summer';
+        if (month >= 9 && month <= 11) return 'autumn';
+        return 'winter';
+    }
+    
+    resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    }
+    
+    init() {
+        this.particles = [];
+        this.animate();
+    }
+    
+    addParticles() {
+        // Limit total particles to prevent performance issues
+        if (this.particles.length > 60) {
+            this.particles.splice(0, 12); // Remove oldest particles
+        }
+        
+        for (let i = 0; i < 12; i++) {
+            this.particles.push(this.createParticle());
+        }
+    }
+    
+    createParticle() {
+        const particle = {
+            x: Math.random() * this.canvas.width,
+            y: -20,
+            vx: (Math.random() - 0.5) * 2,
+            vy: Math.random() * 2 + 1,
+            rotation: Math.random() * Math.PI * 2,
+            rotationSpeed: (Math.random() - 0.5) * 0.1,
+            size: Math.random() * 8 + 4,
+            opacity: Math.random() * 0.8 + 0.2
+        };
+        
+        switch (this.season) {
+            case 'autumn':
+                particle.color = ['#ff6b35', '#f7931e', '#ffb347', '#d2691e'][Math.floor(Math.random() * 4)];
+                particle.shape = 'leaf';
+                break;
+            case 'winter':
+                particle.color = '#ffffff';
+                particle.shape = 'snowflake';
+                particle.vy *= 0.5;
+                break;
+            case 'spring':
+                particle.color = ['#ffb6c1', '#ffc0cb', '#ffffff'][Math.floor(Math.random() * 3)];
+                particle.shape = 'petal';
+                break;
+            case 'summer':
+                particle.color = ['#ffd700', '#ffb347', '#ff8c00'][Math.floor(Math.random() * 3)];
+                particle.shape = 'sunflower';
+                particle.vy *= 0.8;
+                break;
+            case 'songkran':
+                particle.color = ['#00bfff', '#1e90ff', '#87ceeb'][Math.floor(Math.random() * 3)];
+                particle.shape = 'water';
+                particle.vy *= 3;
+                particle.size *= 1.5;
+                break;
+            case 'lunar':
+                particle.color = ['#ff0000', '#ffd700', '#ff4500'][Math.floor(Math.random() * 3)];
+                particle.shape = 'lantern';
+                particle.vy *= 0.3;
+                particle.vx = (Math.random() - 0.5) * 0.5;
+                break;
+        }
+        
+        return particle;
+    }
+    
+    drawParticle(particle) {
+        this.ctx.save();
+        this.ctx.globalAlpha = particle.opacity;
+        this.ctx.translate(particle.x, particle.y);
+        this.ctx.rotate(particle.rotation);
+        this.ctx.fillStyle = particle.color;
+        
+        switch (particle.shape) {
+            case 'leaf':
+                this.ctx.beginPath();
+                this.ctx.ellipse(0, 0, particle.size/3, particle.size/2, 0, 0, Math.PI * 2);
+                this.ctx.fill();
+                break;
+            case 'snowflake':
+                this.ctx.strokeStyle = particle.color;
+                this.ctx.lineWidth = 1;
+                for (let i = 0; i < 6; i++) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(0, 0);
+                    this.ctx.lineTo(0, -particle.size/2);
+                    this.ctx.stroke();
+                    this.ctx.rotate(Math.PI / 3);
+                }
+                break;
+            case 'petal':
+                this.ctx.beginPath();
+                this.ctx.ellipse(0, -particle.size/4, particle.size/4, particle.size/2, 0, 0, Math.PI * 2);
+                this.ctx.fill();
+                break;
+            case 'sunflower':
+                this.ctx.beginPath();
+                this.ctx.arc(0, 0, particle.size/3, 0, Math.PI * 2);
+                this.ctx.fill();
+                for (let i = 0; i < 8; i++) {
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(0, -particle.size/2, particle.size/6, particle.size/3, 0, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.rotate(Math.PI / 4);
+                }
+                break;
+            case 'water':
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, -particle.size/2);
+                this.ctx.quadraticCurveTo(-particle.size/3, 0, 0, particle.size/2);
+                this.ctx.quadraticCurveTo(particle.size/3, 0, 0, -particle.size/2);
+                this.ctx.fill();
+                break;
+            case 'lantern':
+                this.ctx.fillRect(-particle.size/3, -particle.size/2, particle.size*2/3, particle.size);
+                this.ctx.fillRect(-particle.size/4, -particle.size/2-2, particle.size/2, 2);
+                break;
+        }
+        
+        this.ctx.restore();
+    }
+    
+    animate() {
+        this.frameCount = (this.frameCount || 0) + 1;
+        
+        // Only update every other frame for better performance
+        if (this.frameCount % 2 === 0) {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            
+            for (let i = this.particles.length - 1; i >= 0; i--) {
+                const particle = this.particles[i];
+                
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.rotation += particle.rotationSpeed;
+                
+                if (particle.y > this.canvas.height + 20 || 
+                    particle.x < -20 || particle.x > this.canvas.width + 20) {
+                    this.particles.splice(i, 1);
+                } else {
+                    this.drawParticle(particle);
+                }
+            }
+        }
+        
+        requestAnimationFrame(() => this.animate());
+    }
+}
+
 // Initialize
 initTheme();
 createEmojiPattern();
 loadQuotes();
+const particles = new ParticleSystem();
+
+// Test function for all seasons
+window.testSeason = (season) => {
+    particles.season = season;
+    particles.init();
+    // Update emoji background too
+    document.getElementById('emoji-pattern').remove();
+    window.detectSeason = () => season;
+    createEmojiPattern();
+};
+
+// Auto-cycle through all seasons for testing
+window.testAllSeasons = () => {
+    const seasons = ['autumn', 'winter', 'spring', 'summer', 'songkran', 'lunar'];
+    let i = 0;
+    setInterval(() => {
+        console.log('Testing:', seasons[i]);
+        testSeason(seasons[i]);
+        i = (i + 1) % seasons.length;
+    }, 3000);
+};

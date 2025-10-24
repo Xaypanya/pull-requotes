@@ -372,13 +372,13 @@ body.light-mode .card-back {
     animation: confetti-fall 3s linear forwards;
 }
 
-@keyframes confetti-fall {
+@keyframes burst-fall {
     0% {
-        transform: translateY(-10px) rotate(0deg);
+        transform: translate(0, 0) rotate(0deg);
         opacity: 1;
     }
     100% {
-        transform: translateY(100vh) rotate(720deg);
+        transform: translate(var(--dx, 0), 100vh) rotate(360deg);
         opacity: 0;
     }
 }
@@ -914,4 +914,14 @@ body.light-mode #keyboard-hint {
     background: rgba(255, 255, 255, 0.95);
     border-color: rgba(66, 153, 225, 0.4);
     color: #718096;
+}
+
+#particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
 }
