@@ -37,6 +37,7 @@ let dragStartY = 0;
 let dragStartOffsetX = 0;
 let dragStartOffsetY = 0;
 let lastTouchDistance = 0;
+let rafPending = false;
 
 // DOM elements
 const board = document.getElementById('board');
@@ -292,18 +293,27 @@ async function fetchProfiles() {
     }
 }
 
-// Update card positions based on offset
+// Update card positions based on offset using transform (no layout reflow)
 function updateCardPositions() {
     for (const card of cards) {
         if (card.element) {
             const x = card.x + offsetX;
             const y = card.y + offsetY;
 
-            card.element.style.left = x + 'px';
-            card.element.style.top = y + 'px';
-            card.element.style.transform = `rotate(${card.rotation}rad)`;
+            card.element.style.transform = `translate(${x}px, ${y}px) rotate(${card.rotation}rad)`;
             card.element.style.setProperty('--rotation', `${(card.rotation * 180) / Math.PI}deg`);
         }
+    }
+}
+
+// Throttled version for drag events
+function schedulePositionUpdate() {
+    if (!rafPending) {
+        rafPending = true;
+        requestAnimationFrame(() => {
+            rafPending = false;
+            updateCardPositions();
+        });
     }
 }
 
@@ -323,7 +333,7 @@ document.addEventListener('mousemove', (e) => {
         const deltaY = e.clientY - dragStartY;
         offsetX = dragStartOffsetX + deltaX;
         offsetY = dragStartOffsetY + deltaY;
-        updateCardPositions();
+        schedulePositionUpdate();
     }
 });
 
@@ -350,7 +360,7 @@ board.addEventListener('touchmove', (e) => {
         const deltaY = e.touches[0].clientY - dragStartY;
         offsetX = dragStartOffsetX + deltaX;
         offsetY = dragStartOffsetY + deltaY;
-        updateCardPositions();
+        schedulePositionUpdate();
     }
 }, { passive: true });
 
@@ -376,10 +386,10 @@ function createEmojiPattern() {
     emojiPattern.id = 'emoji-pattern';
     emojiPattern.style.cssText = `
         position: fixed;
-        top: -400%;
-        left: -400%;
-        width: 1000vw;
-        height: 1000vh;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
         pointer-events: none;
         z-index: 0;
         overflow: hidden;
@@ -388,7 +398,7 @@ function createEmojiPattern() {
 
     const season = detectSeason();
     let emojis;
-    
+
     switch (season) {
         case 'autumn':
             emojis = ['🍂', '🍁'];
@@ -412,19 +422,20 @@ function createEmojiPattern() {
             emojis = ['💻', '⭐'];
     }
 
-    const cols = Math.ceil(window.innerWidth * 10 / 40);
-    const rows = Math.ceil(window.innerHeight * 10 / 40);
+    const spacing = 60;
+    const cols = Math.ceil(window.innerWidth / spacing) + 1;
+    const rows = Math.ceil(window.innerHeight / spacing) + 1;
 
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
             const emoji = document.createElement('span');
             emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
             const rotation = (Math.random() - 0.5) * 60;
-            const offsetX = (i % 2) * 20;
+            const ox = (i % 2) * 30;
             emoji.style.cssText = `
                 position: absolute;
-                left: ${j * 40 + offsetX}px;
-                top: ${i * 40}px;
+                left: ${j * spacing + ox}px;
+                top: ${i * spacing}px;
                 font-size: 20px;
                 user-select: none;
                 transform: rotate(${rotation}deg);
